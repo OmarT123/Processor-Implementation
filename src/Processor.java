@@ -59,7 +59,6 @@ public class Processor {
 			temp.setOPcode(operation);
 			temp.setR1(binaryToInt(instruction.getWord().substring(4, 9)));
 			temp.setR2(binaryToInt(instruction.getWord().substring(9, 14)));
-			// temp.setR1val(binaryToInt(hmap.get(temp.getR1()).getValue()));
 			temp.setR2val(binaryToInt(hmap.get(temp.getR2()).getValue()));
 			temp.setR3(binaryToInt(instruction.getWord().substring(14, 19)));
 			temp.setR3val(binaryToInt(hmap.get(temp.getR3()).getValue()));
@@ -73,7 +72,6 @@ public class Processor {
 			temp1.setOPcode(operation);
 			temp1.setR1(binaryToInt(instruction.getWord().substring(4, 9)));
 			temp1.setR2(binaryToInt(instruction.getWord().substring(9, 14)));
-			// temp1.setR1val(binaryToInt(hmap.get(temp1.getR1()).getValue()));
 			temp1.setR2val(binaryToInt(hmap.get(temp1.getR2()).getValue()));
 			temp1.setR3(binaryToInt(instruction.getWord().substring(14, 19)));
 			temp1.setR3val(binaryToInt(hmap.get(temp1.getR3()).getValue()));
@@ -87,7 +85,6 @@ public class Processor {
 			temp2.setOPcode(operation);
 			temp2.setR1(binaryToInt(instruction.getWord().substring(4, 9)));
 			temp2.setR2(binaryToInt(instruction.getWord().substring(9, 14)));
-			// temp2.setR1val(binaryToInt(hmap.get(temp2.getR1()).getValue()));
 			temp2.setR2val(binaryToInt(hmap.get(temp2.getR2()).getValue()));
 			temp2.setR3(binaryToInt(instruction.getWord().substring(14, 19)));
 			temp2.setR3val(binaryToInt(hmap.get(temp2.getR3()).getValue()));
@@ -122,7 +119,6 @@ public class Processor {
 			temp5.setOPcode(operation);
 			temp5.setR1(binaryToInt(instruction.getWord().substring(4, 9)));
 			temp5.setR2(binaryToInt(instruction.getWord().substring(9, 14)));
-			// temp2.setR1val(binaryToInt(hmap.get(temp2.getR1()).getValue()));
 			temp5.setR2val(binaryToInt(hmap.get(temp5.getR2()).getValue()));
 			temp5.setR3(binaryToInt(instruction.getWord().substring(14, 19)));
 			temp5.setR3val(binaryToInt(hmap.get(temp5.getR3()).getValue()));
@@ -286,7 +282,7 @@ public class Processor {
 				indexChanged = inst.getWriteBack();
 			}
 		}
-		//timeOutMem--;
+		// timeOutMem--;
 		return inst;
 	}
 
@@ -294,7 +290,7 @@ public class Processor {
 		if (instruction == null)
 			return;
 		if (timeOutWB <= 0) {
-			//wb = false;
+			// wb = false;
 			if (instruction.getMemoryWrite() == 1)
 				return;
 			Register cur = hmap.get(instruction.getWriteBack());
@@ -305,13 +301,12 @@ public class Processor {
 				timeOutWB = 3;
 			}
 			lastChange = cur;
-			//wb = true;
+			// wb = true;
 			// System.out.println("WB: " + binaryToInt(instruction.getWord()));
 		}
-		//timeOutWB--;
+		// timeOutWB--;
 		// System.out.println("WB: " + binaryToInt(instruction.getWord()));
 	}
-	
 
 	public static void runProgram(String fileName) {
 		int numInst = readFile(fileName);
@@ -334,8 +329,7 @@ public class Processor {
 			} else
 				writeBackTimer--;
 			if (memoryTimer == 0 && pipelinereg4 != null) {
-				if (timeOutMem <= 0)
-				{
+				if (timeOutMem <= 0) {
 					pipelinereg4 = memory(pipelinereg3);
 					mm = true;
 				}
@@ -364,8 +358,9 @@ public class Processor {
 			}
 			printCycle();
 		}
-//		printHashMap();
-//		printMemory();
+		printHashMap();
+		System.out.println();
+		printMemory();
 	}
 
 	public static void printCycle() {
@@ -456,7 +451,11 @@ public class Processor {
 
 	public static void printHashMap() {
 		for (Map.Entry<Integer, Register> entry : hmap.entrySet()) {
-			System.out.println("Name: R" + entry.getKey() + ", Value: " + entry.getValue().getValue() + ", Integer: "
+			if (entry.getKey() != 32)
+				System.out.println("Name: R" + entry.getKey() + ", Value: " + entry.getValue().getValue() + ", Integer: "
+					+ binaryToInt(entry.getValue().getValue()));
+			else
+				System.out.println("Name: PC" + ", Value: " + entry.getValue().getValue() + ", Integer: "
 					+ binaryToInt(entry.getValue().getValue()));
 		}
 	}
@@ -521,14 +520,5 @@ public class Processor {
 	public static void main(String[] args) {
 		initialize();
 		runProgram("test.txt");
-//		System.out.println(MEMORY[0]);
-//		System.out.println(MEMORY[1]);
-//		System.out.println(MEMORY[2]);
-//		System.out.println(MEMORY[3]);
-//		System.out.println(MEMORY[4]);
-//		System.out.println(MEMORY[5]);
-//		System.out.println(MEMORY[6]);
-//		System.out.println(MEMORY[503]);
-//		printHashMap();
 	}
 }
